@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 
 // using byte_vector = std::vector<uint8_t>;
 struct byte_vector : std::vector<uint8_t> {
@@ -38,10 +39,16 @@ inline auto operator<<(byte_vector&vec, std::string_view const& sv) ->byte_vecto
 
 inline auto operator<<(byte_vector&vec, char const* str) ->byte_vector&
 {
+    //ToDo optimization wanted
     // while(*str!='\0')
     //     vec<<*str++;
     // return vec;
     return vec<<std::string_view(str);
+}
+template<size_t N>
+inline auto operator<<(byte_vector&vec, char const str[N]) ->byte_vector&
+{
+    return vec<<std::string_view(str,N-1);
 }
 
 #include <optional>
@@ -74,7 +81,7 @@ inline auto operator<<(byte_vector&vec, T const& arg) ->std::enable_if_t<has_fie
     return vec << arg.value;
 }
 
-
+#if 0
 #include <iostream>
 #include "byte_range_ascii.hpp"
 
@@ -82,3 +89,4 @@ template <typename T>
 std::basic_ostream<T>& operator<<(std::basic_ostream<T> &os, byte_vector const& bv){
     return os << byte_range_ascii(bv);
 }
+#endif

@@ -15,11 +15,11 @@ add_subdirectory(googletest)
 
 add_executable(test-byte_vector
     test-byte_range_ascii.cpp
-    test-bytes_hex.cpp
+    test-byte_range_hex.cpp
     test-byte_vector.cpp
-    test-byte_vector_view.cpp
+    test-byte_range_view.cpp
     )
-target_compile_features(test-byte_vector PRIVATE cxx_std_20)
+target_compile_features(test-byte_vector PRIVATE cxx_std_17)
 target_link_libraries(test-byte_vector PRIVATE 
     gtest_main gtest 
     byte_vector)

@@ -1,6 +1,7 @@
 #include "byte_vector.hpp"
-#include "byte_vector_view.hpp"
-#include "std_to_ostream.hpp"
+#include "byte_range_view.hpp"
+#include "byte_range_hex.hpp"
+#include "byte_range_ascii.hpp"
 #include "gtest/gtest.h"
 #include <iostream>
 
@@ -24,7 +25,7 @@ TEST(byte_vector,integral)
    byte_vector bv2 = bv;
    EXPECT_EQ(bv,bv2);
    
-   byte_vector_view bvv{bv};
+   byte_range_view bvv{bv};
    bvv >> c1 >> d1 >> s1 >> t1 >> i1 >> u1 >> l1 >> k1;
    EXPECT_EQ(bvv.size(), 0);
    EXPECT_TRUE(bvv.empty());
@@ -44,7 +45,7 @@ TEST(byte_vector,string)
    const char* cstr = "Hello byte_vector";
    bv<<int(strlen(cstr))<<cstr;
    
-   byte_vector_view bvv{bv};
+   byte_range_view bvv{bv};
    int slen;
    string s;
    bvv >> slen >> s;
@@ -56,14 +57,14 @@ TEST(byte_vector,string)
    EXPECT_TRUE(bv.empty());
    
    bv<<string_view{"No place for peace"};
-   byte_vector_view{bv} >> s;
+   byte_range_view{bv} >> s;
    EXPECT_EQ(s,"No place for peace");
    
    byte_vector bv2;
    bv2<<"There is ";
    bv2<<bv;
    string s1;
-   byte_vector_view{bv2} >> s >> s1;
+   byte_range_view{bv2} >> s >> s1;
    EXPECT_TRUE(bvv.good());
    EXPECT_EQ(s+s1,"There is No place for peace");
    EXPECT_TRUE(bvv.empty());
@@ -76,7 +77,7 @@ TEST(byte_vector,tup)
    byte_vector bv;
    bv << t;
    decltype(t) to;
-   byte_vector_view bvv{bv};
+   byte_range_view bvv{bv};
    bvv >> to;
    EXPECT_EQ(t,to);
 // cerr<<byte_range_ascii(bvv)<<endl;
@@ -90,7 +91,7 @@ TEST(byte_vector,opt)
    EXPECT_EQ(bv.size(),sizeof(int));
 
    // optional<int> oi;
-   //byte_vector_view{bv} >> oi;
+   //byte_range_view{bv} >> oi;
    
 }
 
@@ -102,31 +103,30 @@ TEST(byte_vector,ascii)
          "0x000: 00 11 48 65 6C 6C 6F 20 62 79 74 65 5F 76 65 63  |..Hello byte_vec|\n"
          "0x010: 74 6F 72                                         |tor|";
    stringstream ss;
-   ss<<bv;
+   ss<<byte_range_ascii{bv};
    EXPECT_EQ(ss.str(),expected);
    
    bv.clear();
    bv << "Short";
    constexpr auto expected_short = "0x000: 00 05 53 68 6F 72 74  |..Short|";  // No new line before.
    ss = {};
-   ss<<bv;
+   ss<<byte_range_ascii{bv};
    EXPECT_EQ(ss.str(),expected_short);
 }
 
-#include "bytes_hex.hpp"
 TEST(byte_vector,hex)
 {
    byte_vector bv;
    bv << "Hello byte_vector";
    constexpr auto expected = "001148656C6C6F20627974655F766563746F72";
    stringstream ss;
-   ss<<bytes_hex{bv};
+   ss<<byte_range_hex{bv};
    EXPECT_EQ(ss.str(),expected);
    
    bv.clear();
    bv << "Short";
    constexpr auto expected_short = "000553686F7274";  // No new line before.
    ss = {};
-   ss<<bytes_hex{bv};
+   ss<<byte_range_hex{bv};
    EXPECT_EQ(ss.str(),expected_short);
 }

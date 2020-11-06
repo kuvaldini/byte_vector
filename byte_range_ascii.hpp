@@ -19,8 +19,7 @@ template<typename Iter>
 struct byte_range_ascii {
     static_assert( sizeof( typename std::iterator_traits<Iter>::value_type )== 1);
     using type = byte_range_ascii<Iter>;
-    Iter first;
-    Iter last;
+    Iter first, last=first;
     bool oneline = (std::distance(begin(),end()) <= 16);
     size_t indent = 0;
     bool prenewline = not oneline;

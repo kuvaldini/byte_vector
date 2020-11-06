@@ -5,21 +5,22 @@
 
 /// Wrapper struct to write  with std::ostream
 template<typename Iter>
-struct bytes_hex {
+struct byte_range_hex {
     Iter first;
     Iter last;
     static_assert( sizeof(*first) == 1 );
 //    static_assert( sizeof( typename std::iterator_traits<Iter>::value_type )== 1);
 
-    bytes_hex()=default;
-    bytes_hex(Iter f, Iter l): first{f}, last{l} {}
-    bytes_hex(Iter buf, size_t len): bytes_hex(buf,buf+len){}
-    template<typename C> bytes_hex(C const& c): first{c.begin()}, last{c.end()} {} //bytes_hex(c.begin(), c.end()){}
+    byte_range_hex()=default;
+    byte_range_hex(Iter f, Iter l): first{f}, last{l} {}
+    byte_range_hex(Iter buf, size_t len): byte_range_hex(buf,buf+len){}
+    template<typename C> byte_range_hex(C const& c): first{c.begin()}, last{c.end()} {} //byte_range_hex(c.begin(), c.end()){}
+    template<size_t N> byte_range_hex(const char str[N]): byte_range_hex(str,str+N){} //first{str}, last{first+N} {} /// String literal
 
     Iter begin()const{ return first; }
     Iter end()  const{ return last; }
 
-    friend std::ostream& operator<<(std::ostream&os, bytes_hex const& hb){
+    friend std::ostream& operator<<(std::ostream&os, byte_range_hex const& hb){
         using namespace std;
         auto prev_os_format = os.flags();
         auto prev_os_fill = os.fill();
@@ -31,4 +32,4 @@ struct bytes_hex {
         return os;
     }
 };
-template<typename Container> bytes_hex(Container const& c) -> bytes_hex<decltype(c.begin())>;
+template<typename Container> byte_range_hex(Container const& c) -> byte_range_hex<decltype(c.begin())>;
