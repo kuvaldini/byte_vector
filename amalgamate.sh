@@ -13,11 +13,14 @@ rm_once(){
 }
 
 SCRIPT_DIR="$(dirname $(realpath ${BASH_SOURCE[0]}))"
+REV_LABEL_DIR="$(dirname "$OUT")"
+
+$SCRIPT_DIR/git-rev-label-short.sh >$REV_LABEL_DIR/rev_label
 
 cat >"$OUT" <<END
 #pragma once
 
-#define BYTE_VECTOR_REV_LABEL "$($SCRIPT_DIR/git-rev-label-short.sh)"
+#define BYTE_VECTOR_REV_LABEL "$(cat $REV_LABEL_DIR/rev_label)"
 #define BYTE_VECTOR_VERSION BYTE_VECTOR_REV_LABEL
 
 /////////////  byte_vector.hpp  /////////////////
