@@ -87,11 +87,9 @@ inline static byte_range_view& operator>>(byte_range_view&bvv, uint8_t&ui8){
 }
 
 #include <tuple>
-#include "local_type_traits.hpp"
-
-template<typename TupleT>
-inline static auto operator>>(byte_range_view&bvv, TupleT&tu) 
-->std::enable_if_t<is_tuple<TupleT>,byte_range_view&> 
+template<typename...Ts>
+inline static auto operator>>(byte_range_view&bvv, std::tuple<Ts...>&tu)
+->byte_range_view&
 {
     apply(
         [&](auto&...elements) {

@@ -73,14 +73,6 @@ inline auto operator<<(byte_vector&vec, std::tuple<Ts...> const& theTuple) ->byt
     return vec;
 }
 
-
-#include "local_type_traits.hpp"
-template<typename T> //c++20 requires T.value
-inline auto operator<<(byte_vector&vec, T const& arg) ->std::enable_if_t<has_field_value<T>, byte_vector&>
-{
-    return vec << arg.value;
-}
-
 #if 0
 #include <iostream>
 #include "byte_range_ascii.hpp"

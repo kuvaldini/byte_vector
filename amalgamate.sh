@@ -9,7 +9,7 @@ else OUT="$1"
 fi
 
 rm_once(){
-   sed -E '/^#pragma once/'d "$@"
+   sed -E '/^#pragma once/d' "$@"
 }
 
 SCRIPT_DIR="$(dirname $(realpath ${BASH_SOURCE[0]}))"
