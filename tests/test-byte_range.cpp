@@ -1,14 +1,14 @@
-#include "byte_range_view.hpp"
+#include "byte_range.hpp"
 #include "gtest/gtest.h"
 
 using namespace std;
 using namespace std::literals;
 
 
-TEST(byte_range_view, first)
+TEST(byte_range, first)
 {
    constexpr string_view input = "asdfghjkl1\0\n1234567890"sv;
-   byte_range_view bvv {input};
+   byte_range bvv {input};
    EXPECT_EQ(bvv.size(), input.size());
    
    char c;
@@ -30,10 +30,10 @@ TEST(byte_range_view, first)
    EXPECT_TRUE(bvv.empty());
 }
 
-TEST(byte_range_view, second)
+TEST(byte_range, second)
 {
    constexpr char input[] = "asdfghjkl123456789";
-   byte_range_view bvv {input};
+   byte_range bvv {input};
    EXPECT_EQ(bvv.size(), sizeof(input)-1);
    
    char c;
@@ -59,10 +59,10 @@ TEST(byte_range_view, second)
    EXPECT_FALSE(bvv.good());
 }
 
-TEST(byte_range_view, integral_t)
+TEST(byte_range, integral_t)
 {
    constexpr string_view input = "as\x12\x34\xab\xcd\x11\x22\x33\x44";
-   byte_range_view bvv {input};
+   byte_range bvv {input};
    EXPECT_EQ(bvv.size(), input.size());
    
    char c;
@@ -89,9 +89,9 @@ TEST(byte_range_view, integral_t)
    // EXPECT_EQ(str, ""); //input.substr(2+4+4));
 }
 
-TEST(byte_range_view, not_enough_bytes)
+TEST(byte_range, not_enough_bytes)
 {
-   byte_range_view bvv {"input"};
+   byte_range bvv {"input"};
    int32_t i;
    bvv>>i;
    char c;

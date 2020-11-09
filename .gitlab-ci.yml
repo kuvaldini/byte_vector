@@ -65,8 +65,10 @@ build_and_test:
   ## -------- BUILD --------
   - cmake -B build -DBUILD_TESTING=ON
   - cmake --build build -- -j #VERBOSE=1
-  - cmake --build build -- byte_vector_amalgamate
-  - ( cd build && ctest; )
+  #- cmake --build build --target byte_vector_amalgamate
+  ## -------- TEST --------
+  - cmake --build build --target test  #- ( cd build && ctest; )
+  - ./build/byte_vector-demo
   ## -------- PREPARE ARTIFACTS -------
   - ln -f build/{rev_label,byte_vector.hh} -t.
   - git log -1 --format=%B >commit_message

@@ -29,8 +29,8 @@ $(rm_once byte_vector.hpp)
 /////////////  byte_range_ascii.hpp  /////////////////
 $(rm_once byte_range_ascii.hpp)
 
-/////////////  byte_range_view.hpp  /////////////////
-$(rm_once byte_range_view.hpp)
+/////////////  byte_range.hpp  /////////////////
+$(rm_once byte_range.hpp)
 
 /////////////  byte_range_hex.hpp  /////////////////
 $(rm_once byte_range_hex.hpp)

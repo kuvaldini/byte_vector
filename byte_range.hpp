@@ -4,20 +4,20 @@
 #include <type_traits>
 #include <iostream>
 
-struct byte_range_view {
+struct byte_range {
     using iterator = const unsigned char*;
     using siterator = const signed char*;
     iterator first, last=first;
     bool error_flag_=false;
-    byte_range_view(byte_range_view const& bvv):first(bvv.first),last(bvv.last),error_flag_(bvv.error_flag()){}
-    byte_range_view(byte_range_view     && bvv):byte_range_view(bvv){}
-    byte_range_view(iterator beg, size_t len): first(beg),last(beg+len){}
-    byte_range_view(iterator beg, iterator end): first(beg),last(end){}
-    byte_range_view(siterator beg, size_t len): first((iterator)beg),last((iterator)beg+len){}
-    //byte_range_view(byte_vector const& bv):first(bv.data()),last(bv.data()+bv.size()){}
-    //template<typename C> byte_range_view(C const& c): byte_range_view(c.begin(), c.end()){}
-    template<typename C> byte_range_view(C const& c): first((iterator)c.data()), last((iterator)c.data()+c.size()) {}
-    template<size_t N> byte_range_view(char const (&c)[N]): first((iterator)c), last((iterator)(c+N-1)) {}
+    byte_range(byte_range const& bvv):first(bvv.first),last(bvv.last),error_flag_(bvv.error_flag()){}
+    byte_range(byte_range     && bvv):byte_range(bvv){}
+    byte_range(iterator beg, size_t len): first(beg),last(beg+len){}
+    byte_range(iterator beg, iterator end): first(beg),last(end){}
+    byte_range(siterator beg, size_t len): first((iterator)beg),last((iterator)beg+len){}
+    //byte_range(byte_vector const& bv):first(bv.data()),last(bv.data()+bv.size()){}
+    //template<typename C> byte_range(C const& c): byte_range(c.begin(), c.end()){}
+    template<typename C> byte_range(C const& c): first((iterator)c.data()), last((iterator)c.data()+c.size()) {}
+    template<size_t N> byte_range(char const (&c)[N]): first((iterator)c), last((iterator)(c+N-1)) {}
     iterator begin()const{return first;}
     iterator end()const{return last;}
     size_t size()const{return std::distance(first,last);}
@@ -41,17 +41,17 @@ struct byte_range_view {
     bool error_flag()const{ return error_flag_; }
     bool& error_flag(){ return error_flag_; }
 };
-//template<typename Container> byte_range_view(Container const&) -> byte_range_view<decltype(c.begin())>; //deduction guide
+//template<typename Container> byte_range(Container const&) -> byte_range<decltype(c.begin())>; //deduction guide
 
-/// to be able for rvalues byte_range_view, returns a copy
-template<class T>
-inline byte_range_view operator>>(byte_range_view&&bvv, T&v){
-    return bvv >> v;
-}
+// /// to be able for rvalues byte_range, returns a copy
+// template<class T>
+// inline byte_range operator>>(byte_range&&bvv, T&v){
+//     return bvv >> v;
+// }
 
 template<typename T>
-inline static auto operator>>(byte_range_view&bvv, T&val)
-    ->std::enable_if_t< std::is_integral_v<T>,  byte_range_view& >
+inline static auto operator>>(byte_range&bvv, T&val)
+    ->std::enable_if_t< std::is_integral_v<T>,  byte_range& >
 {
     using namespace std;
     if(bvv.size() < sizeof(T)){
@@ -71,7 +71,7 @@ inline static auto operator>>(byte_range_view&bvv, T&val)
     return bvv;
 }
 
-inline static byte_range_view& operator>>(byte_range_view&bvv, std::string&str){
+inline static byte_range& operator>>(byte_range&bvv, std::string&str){
     uint16_t /* byte_vector::strsize_t */ strsize;
     bvv>>strsize;
     if(bvv.bad() or strsize > bvv.size())
@@ -81,15 +81,14 @@ inline static byte_range_view& operator>>(byte_range_view&bvv, std::string&str){
     return bvv;
 }
 
-inline static byte_range_view& operator>>(byte_range_view&bvv, uint8_t&ui8){
+inline static byte_range& operator>>(byte_range&bvv, uint8_t&ui8){
     ui8 = *bvv.first++;
     return bvv;
 }
 
 #include <tuple>
 template<typename...Ts>
-inline static auto operator>>(byte_range_view&bvv, std::tuple<Ts...>&tu)
-->byte_range_view&
+inline static byte_range& operator>>(byte_range&bvv, std::tuple<Ts...>&tu)
 {
     apply(
         [&](auto&...elements) {
@@ -98,15 +97,21 @@ inline static auto operator>>(byte_range_view&bvv, std::tuple<Ts...>&tu)
     );
     return bvv;
 }
+/// and rvalue
+template<typename...Ts>
+inline static byte_range& operator>>(byte_range&bvv, std::tuple<Ts...>&&tu)
+{
+    return bvv >> tu;
+}
 
 
 //////////////////////////
-template <typename UnknownType>
+template<typename UnknownType>
 struct Type_Not_Supported : std::false_type {};
 
 /// A fallback function template to stop compiler try different combinations of types, reduce compiler output.
 template<typename UnknownType>
-inline static auto operator>>(byte_range_view&bvv, UnknownType&&) ->byte_range_view& {
+inline static auto operator>>(byte_range&bvv, UnknownType&&) ->byte_range& {
     static_assert(Type_Not_Supported<UnknownType>{});
     return bvv;
 }

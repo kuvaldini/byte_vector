@@ -18,7 +18,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/byte_vector.hh
    COMMAND ${CMAKE_CURRENT_LIST_DIR}/amalgamate.sh ${CMAKE_CURRENT_BINARY_DIR}/byte_vector.hh
    DEPENDS
       byte_vector.hpp
-      byte_range_view.hpp
+      byte_range.hpp
       byte_range_ascii.hpp
       byte_range_hex.hpp
 )

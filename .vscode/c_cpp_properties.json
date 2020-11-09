@@ -4,6 +4,7 @@
             "name": "gcc",
             "includePath": [
                 "${workspaceFolder}/**"
+                ,"build/"
             ],
             "defines": [],
             "macFrameworkPath": [],
