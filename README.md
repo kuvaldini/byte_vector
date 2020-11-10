@@ -16,7 +16,7 @@ by using family of template operators `byte_vector<<` and `byte_range>>`.
 
 ### Example of operation
 Lets consider example program `byte_vector-demo.cpp`
-```
+```cpp
 #include "byte_vector.hh"
 
 using namespace std;
@@ -85,7 +85,7 @@ cmake -Bbuild  &&  cmake --build build  &&  ./build/byte_vector-demo
 ```
 
 
-Usage
+Integrate to user project
 -----
 ### 1. The most straightforward way is to include this project's directory.
 I suggest to use [git subrepo](https://github.com/ingydotnet/git-subrepo)
@@ -95,14 +95,14 @@ git subrepo clone git@gitlab.com:kyb/byte_vector.git byte_vector
 ```
 Then add byte_vector project directory to includes.
 
-### 2. Using the only header file (may be the most convenient way)
+### 2. Using the only header file – may be the most convenient way
 Download amalgama header from the project's [releases page](https://gitlab.com/kyb/byte_vector/-/releases)
 ```
 cd your/project/include_dir
 curl -fsSL https://gitlab.com/kyb/byte_vector/raw/artifacts/master/$(curl https://gitlab.com/kyb/byte_vector/raw/artifacts/master/byte_vector.hh -fsSL) -o byte_vector.hh
 ```
 
-### 3. The other way is using CMake `target_link_libraries`
+### 3. Using CMake `target_link_libraries` with interface library
 *Assuming the repo has been already cloned as sugested in (1)*  
 Since `byte_vector` this is header-only library there is no need to link with it.
 But CMake has feature INTERFACE LIBRARIES. byte_vector provides two interface 
