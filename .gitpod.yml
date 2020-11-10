@@ -1,0 +1,9 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - command: cmake -B build  &&  cmake --build build  &&  cmake --build build --target test  &&  ./build/byte_vector-demo
+
+# vscode:
+#   extensions:
+#     - marus25.cortex-debug@0.3.7:ZlJKaCz74ZngdD/ZtFq0pg==
