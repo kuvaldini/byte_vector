@@ -1,0 +1,5 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - command: cmake -B build  &&  cmake --build build  &&  cmake --build build --target test  &&  ./build/byte_vector-demo
