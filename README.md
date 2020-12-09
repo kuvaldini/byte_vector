@@ -69,14 +69,24 @@ int main()
 This is an output from `./byte_vector-demo`
 ```
 0x000: 00 00 01 31 8C 04 D2 C1  |...1....|
+       ^^^^^^^^^^^^^^^^^^^^^^^ 8 byte int
 0x000: 00 00 01 31 8C 04 D2 C1 00 20  |...1..... |
-
+                              ^^^^^ 2 byte short
 0x000: 00 00 01 31 8C 04 D2 C1 00 20 00 05 48 65 6C 6C  |...1..... ..Hell|
 0x010: 6F 00 06 20 77 6F 72 6C 64 21                    |o.. world!|
+                                     ^^^^^ string length 2byte value 5
+          ^^^^^ string_view lenght 2byte value 6
 ----------------
 0x000: 00 23 C6 77 FF FF 00 05 68 65 6C 6C 6F  |.#.w....hello|
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ custom struct of int,short,string
+       ^^^^^^^^^^^ int
+                   ^^^^^ short value -1
+                         ^^^^^ string length 5
+                               ^^^^^^^^^^^^^^ string data of 5 bytes
 <empty>
+^^^^^^^ after deserialization
 2344567 -1 hello
+^^^^^^^^^^^^^^^^ deserialized struct in text format
 ```
 
 Build and run it with:
