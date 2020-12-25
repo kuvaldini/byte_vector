@@ -4,6 +4,9 @@
 
 byte_vector for C++
 ===================
+[![GitLab|origin](https://img.shields.io/badge/GitLab-origin-darkorange?logo=gitlab)](https://gitlab.com/kyb/byte_vector) 
+[![GitHub|mirror](https://img.shields.io/badge/GitHub-mirror-blue?logo=github)](https://github.com/kuvaldini/byte_vector)  
+
 **byte_vector** is a family of C++ types and functions to provide next functionality:
 - serialization to sequence of bytes
 - deserialization from sequence of bytes
